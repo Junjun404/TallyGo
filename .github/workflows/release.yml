@@ -1,0 +1,66 @@
+name: Release Apple Silicon macOS installer
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: Existing release tag to build and upload the DMG to
+        required: true
+        default: v0.1.0
+
+permissions:
+  contents: write
+
+jobs:
+  build-macos:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install Rust target
+        run: rustup target add aarch64-apple-darwin
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Apple Silicon DMG
+        run: npm run build:mac:arm64
+
+      - name: Stage DMG
+        run: |
+          DMG_PATH=$(find src-tauri/target/aarch64-apple-darwin/release/bundle/dmg -maxdepth 1 -name '*.dmg' -print -quit)
+          test -n "$DMG_PATH"
+          mkdir -p release-assets
+          cp "$DMG_PATH" release-assets/TallyGo-macOS-Apple-Silicon.dmg
+
+      - name: Determine release tag
+        id: release_tag
+        shell: bash
+        env:
+          INPUT_TAG_NAME: ${{ inputs.tag_name }}
+        run: |
+          if [[ "$GITHUB_EVENT_NAME" == "workflow_dispatch" ]]; then
+            echo "tag_name=$INPUT_TAG_NAME" >> "$GITHUB_OUTPUT"
+          else
+            echo "tag_name=$GITHUB_REF_NAME" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Publish DMG
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG_NAME: ${{ steps.release_tag.outputs.tag_name }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          if gh release view "$TAG_NAME" --repo "$REPOSITORY" >/dev/null 2>&1; then
+            gh release upload "$TAG_NAME" release-assets/TallyGo-macOS-Apple-Silicon.dmg --clobber --repo "$REPOSITORY"
+          else
+            gh release create "$TAG_NAME" release-assets/TallyGo-macOS-Apple-Silicon.dmg --title "$TAG_NAME" --generate-notes --verify-tag --repo "$REPOSITORY"
+          fi

@@ -9,6 +9,7 @@
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "typecheck": "tsc --noEmit",
+    "build:mac:arm64": "tauri build --target aarch64-apple-darwin --bundles dmg",
     "tauri": "tauri"
   },
   "dependencies": {

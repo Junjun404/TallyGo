@@ -24,6 +24,12 @@ pub fn run() {
         )
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_fs::init())
+        .setup(|app| {
+            #[cfg(target_os = "macos")]
+            app.set_menu(tauri::menu::Menu::default(app.handle())?)?;
+
+            Ok(())
+        })
         .run(tauri::generate_context!())
         .expect("error while running tallygo");
 }

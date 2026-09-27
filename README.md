@@ -11,12 +11,22 @@ Built with Tauri + React + SQLite — small footprint, fast startup, and your da
 
 ## ⬇️ 下载安装 / Download
 
-前往 **[Releases](../../releases)** 页面下载 Windows 安装包（`.msi` 或 `.exe`），双击安装即可。
+**当前版本 / Current version: `v0.1.0`**
 
-Go to the **[Releases](../../releases)** page and download the Windows installer (`.msi` or `.exe`), then double-click to install.
+| 平台 / Platform | 下载 / Download |
+|---|---|
+| macOS（Apple Silicon） | [下载 DMG](https://github.com/Junjun404/TallyGo/releases/latest/download/TallyGo-macOS-Apple-Silicon.dmg) |
+| Windows（x64） | [下载原版 EXE](https://github.com/Junjun404/TallyGo/releases/download/v0.1.0/TallyGo_0.1.0_x64-setup.exe) |
 
-无需安装 Node.js、Rust 或任何运行库，安装即用。
-No Node.js, Rust, or runtime required — install and go.
+Download the installer for your platform using the links above. The Windows build is for x64 PCs; the macOS build is for Apple Silicon only.
+
+Mac：打开 `.dmg`，将 TallyGo 拖入“应用程序”。此版本仅支持 Apple Silicon（M 系列芯片），最低 macOS 11。当前 DMG 使用 ad-hoc 签名，首次打开时 macOS 可能要求在“系统设置 → 隐私与安全性”中允许打开。Windows：打开安装包并按提示安装。用户无需安装 Node.js、Rust 或其他运行库。
+
+Mac: Open the `.dmg` and drag TallyGo to Applications. This build supports Apple Silicon (M-series chips) only and requires macOS 11 or later. The current DMG is ad-hoc signed; macOS may ask you to allow the app under System Settings → Privacy & Security on first launch. Windows: open the installer and follow the prompts. Users do not need Node.js, Rust, or other runtimes.
+
+macOS 版本使用系统字体、原生滚动条和 macOS 应用菜单，窗口支持更紧凑的分屏尺寸。应用保持本地优先：SQLite 数据库、导入导出文件和主题偏好都保存在本机。
+
+The macOS build uses system fonts, native scrollbars, and a macOS application menu, with a compact window size suitable for split view. The app remains local-first: the SQLite database, import/export files, and theme preference stay on the device.
 
 ---
 
@@ -73,7 +83,11 @@ Set a monthly total or per-category budget on the **Budgets** page — you'll be
 - 备份 = 复制这一个文件，或在 **设置** 中导出 JSON / CSV
 - Backup = copy one file, or export JSON / CSV from **Settings**.
 
-**数据库位置 / DB location:** `%APPDATA%\com.tallygo.desktop\tallygo.db`
+**数据库位置 / DB location:** Windows `%APPDATA%\com.tallygo.desktop\tallygo.db`；macOS `~/Library/Application Support/com.tallygo.desktop/tallygo.db`
+
+数据库按日期和常用关联字段建立索引，账单列表最多显示最近 1000 条记录。金额和账户余额会在记账、修改、删除时同步更新；建议定期使用 JSON 导出备份。
+
+The database indexes dates and common relationship fields, and the records view shows up to the latest 1,000 records. Amounts and account balances are updated when records are added, edited, or deleted. Regular JSON exports are recommended for backup.
 
 ---
 
@@ -93,7 +107,8 @@ Set a monthly total or per-category budget on the **Budgets** page — you'll be
 ### 环境要求 Requirements
 
 - Node.js 18+
-- Rust（`rustup`）+ Visual Studio Build Tools（含 C++ 桌面开发）
+- Rust（`rustup`）+ Windows Visual Studio Build Tools（含 C++ 桌面开发）
+- macOS Apple Silicon：Xcode Command Line Tools + Rust（`rustup`）
 
 ### 安装与运行 Install & Run
 
@@ -102,7 +117,16 @@ npm install
 
 npm run tauri dev      # 开发模式 Development
 npm run tauri build    # 打包 Installers → src-tauri/target/release/bundle/
+npm run build:mac:arm64 # Apple Silicon DMG → src-tauri/target/aarch64-apple-darwin/release/bundle/dmg/
 ```
+
+`build:mac:arm64` 只生成 Apple Silicon（`aarch64-apple-darwin`）DMG，不兼容 Intel Mac。
+
+`build:mac:arm64` produces an Apple Silicon-only (`aarch64-apple-darwin`) DMG and does not support Intel Macs.
+
+推送 `v*` 格式的 Git 标签（例如当前版本 `v0.1.0`）会触发 GitHub Actions，为 Apple Silicon 构建 DMG 并附加到此仓库的 GitHub Release。Windows 下载直接使用原始仓库 `Junjun404/TallyGo` 发布的 x64 EXE。
+
+Pushing a Git tag matching `v*` (for example, the current `v0.1.0`) triggers GitHub Actions to build an Apple Silicon DMG and attach it to this repository's GitHub Release. The Windows download uses the x64 EXE published by the original `Junjun404/TallyGo` repository.
 
 ### 常用命令 Commands
 

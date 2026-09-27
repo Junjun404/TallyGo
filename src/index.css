@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  font-family: 'Segoe UI', 'Microsoft YaHei', system-ui, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
   color-scheme: light;
 }
 
@@ -30,35 +30,6 @@ body,
 select,
 option {
   transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
-}
-
-::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  background-clip: content-box;
-  border: 2px solid transparent;
-  border-radius: 6px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
-  background-clip: content-box;
-  border: 2px solid transparent;
-}
-html.dark ::-webkit-scrollbar-thumb {
-  background: #475569;
-  background-clip: content-box;
-  border: 2px solid transparent;
-}
-html.dark ::-webkit-scrollbar-thumb:hover {
-  background: #64748b;
-  background-clip: content-box;
-  border: 2px solid transparent;
 }
 
 @layer components {
