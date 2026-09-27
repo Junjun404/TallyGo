@@ -15,7 +15,7 @@ Built with Tauri + React + SQLite — small footprint, fast startup, and your da
 
 | 平台 / Platform | 下载 / Download |
 |---|---|
-| macOS（Apple Silicon） | [下载 DMG](https://github.com/shj200609-blip/TallyGo-for-mac/releases/latest/download/TallyGo-macOS-Apple-Silicon.dmg) |
+| macOS（Apple Silicon） | [下载 DMG](https://github.com/Junjun404/TallyGo/releases/latest/download/TallyGo-macOS-Apple-Silicon.dmg) |
 | Windows（x64） | [下载原版 EXE](https://github.com/Junjun404/TallyGo/releases/download/v0.1.0/TallyGo_0.1.0_x64-setup.exe) |
 
 Download the installer for your platform using the links above. The Windows build is for x64 PCs; the macOS build is for Apple Silicon only.
